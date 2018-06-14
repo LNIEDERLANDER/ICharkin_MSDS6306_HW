@@ -1,0 +1,7 @@
+Final_name_list.txt contains the list of 10 most popular girl names for the years 2015 and 2016 combined.
+
+Icharkin_Homework_5.RMD contains the RMarkdown file of the Homework 5
+
+Icharkin_Homework_5.HTML contains knitted output of the Rmarkdown file for Homework 5
+
+Codebook*.docx files contain descriptions of variables in the datasets used for the Homework
