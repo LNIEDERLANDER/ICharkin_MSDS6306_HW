@@ -1,0 +1,99 @@
+---
+title: "ICharkin_MSDS6306_Homework5"
+author: "Ivan Charkin"
+date: "June 10, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+In this question we load a TXT file with names for 2016 into R
+
+```{r}
+df <- read.table ("D:\\OneDrive\\SMU\\6306 doing data science\\Unit 5\\yob2016.txt", header = FALSE, sep = ";")
+head (df)
+
+id2016<- c("Name", "Gender", "Amount2016")
+colnames(df) <- id2016
+head (df)
+str (df)
+summary(df)
+```
+
+Now remove an observation with three y's
+
+```{r}
+badrow<-grep ("yyy$", df$Name)
+
+badrow
+
+y2016 <- df [-badrow,]
+```
+
+## Question 2
+
+In this question we load the second file for 2015 names. Displaying the last 10 rows. 
+
+```{r}
+y2015 <- read.table ("D:\\OneDrive\\SMU\\6306 doing data science\\Unit 5\\yob2015.txt", header = FALSE, sep = ",")
+id2015 <- c("Name", "Gender", "Amount2015")
+colnames(y2015) <- id2015
+head (y2015)
+
+tail (y2015, 10)
+```
+
+All of the "rare" names start with Z. All of the names have "M" gender.
+
+Now we merge datasets for 2015 and 2016 and in the process eliminate the names which are unique for one specific year. 
+
+```{r}
+final <- merge(y2015, y2016, by=c("Name", "Gender"))
+head(final)
+```
+
+## Question 3
+
+In this question we calculate the amounts for 2015 and 2016 and find 10 most popular names. 
+
+```{r}
+final$Total <- final$Amount2015+final$Amount2016
+head(final)
+
+finalordered <- final [order (-final$Total),  ]
+head(finalordered,10)
+
+as.character (finalordered[1:10,"Name"])
+```
+
+Since the clients are interested in girl names, we determine the list of 10 most popular girl names and import them to CSV file
+
+```{r}
+finalorderedgirls <- finalordered [finalordered$Gender == "F",]
+as.character (finalorderedgirls [1:10,"Name"])
+
+finallist <- finalorderedgirls [1:10, c("Name", "Total")]
+
+write.csv(finallist, file = "D:\\OneDrive\\SMU\\6306 doing data science\\Unit 5\\Final_name_list.txt", row.names = FALSE)
+
+```
+
+
+
+## Question 4
+
+The link to the GitHub repository for this homework:  
+https://github.com/icharkin/ICharkin_MSDS6306_HW
+
+To generate codebooks the following code was used
+
+```{r eval=FALSE}
+#codebook
+library(dataMaid)
+makeCodebook(df,  replace=TRUE)
+makeCodebook(y2015, replace=TRUE)
+```
